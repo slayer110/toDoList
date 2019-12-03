@@ -5,7 +5,7 @@ class Case extends Component {
   render() {
     return (
       <div>
-        <p>{this.props.text}<input type='checkbox' checked={this.props.done}/></p>
+        <p>{this.props.text}  {this.props.date}<input type='checkbox' checked={this.props.done}/></p>
       </div>
     );
   }
