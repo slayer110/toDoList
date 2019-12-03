@@ -4,9 +4,11 @@ class Case extends Component {
 
   render() {
     return (
-      <div>
-        <p>{this.props.text}  {this.props.date}<input type='checkbox' checked={this.props.done}/></p>
-      </div>
+        <tr>
+          <td>{this.props.text}</td>
+          <td>{this.props.date}</td>
+          <td><input type='checkbox' checked={this.props.done}/></td>
+        </tr>
     );
   }
 }

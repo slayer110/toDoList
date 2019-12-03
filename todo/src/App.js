@@ -12,16 +12,10 @@ class App extends Component {
         {text: 'Станцевать', done: false, date: '15.06.2019'}
       ],
       startDate: '',
-      case: '',
       visibleAdd: false
     };
   }
 
-  handleChange = (data) => {
-    this.setState({
-      startDate: data
-    });
-  };
   visibleForm = () => {
     this.setState({visibleAdd: !this.state.visibleAdd})
   };
@@ -39,10 +33,22 @@ class App extends Component {
       <Case key={index} text={elem.text} done={elem.done} date={elem.date}/>
     );
     return (<React.Fragment>
-        <div>
-          {cases}
-          <button onClick={this.visibleForm}>Add</button>
+        <div className='cases'>
+          <h1>Cases</h1>
+          <table>
+            <thead>
+            <tr>
+              <th>Task</th>
+              <th>Date</th>
+              <th>Done</th>
+            </tr>
+            </thead>
+            <tbody>
+            {cases}
+            </tbody>
+          </table>
         </div>
+        <button onClick={this.visibleForm} className='btn'>Add</button>
         {this.state.visibleAdd ? <Add changeDate={this.changeDateForAdd} addCase={this.addCase}/> : ''}
       </React.Fragment>
     )
