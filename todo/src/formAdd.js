@@ -14,7 +14,7 @@ class Add extends Component {
 
   changeDate = (date) => {
     this.props.changeDate(date);
-    this.props.mistake = false
+    // this.props.mistake = false
     this.setState({startDate: date})
   };
   text = (e) => {

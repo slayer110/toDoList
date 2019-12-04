@@ -44,6 +44,7 @@
 
 .cases {
     text-align: center;
+    position: relative;
 }
 
 table {
@@ -140,3 +141,11 @@ tr td:last-child {
     cursor: pointer;
 }
 
+.sort {
+    position: absolute;
+    top: 14px;
+    left: 62%;
+    cursor: pointer;
+    color: blue;
+    font-weight: bold;
+}

@@ -40,6 +40,7 @@ class App extends Component {
     return (<React.Fragment>
         <div className='cases'>
           <h1>Cases</h1>
+          <p className='sort'>sort</p>
           <table>
             <thead>
             <tr>
