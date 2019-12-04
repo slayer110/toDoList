@@ -14,7 +14,6 @@ class Add extends Component {
 
   changeDate = (date) => {
     this.props.changeDate(date);
-    // this.props.mistake = false
     this.setState({startDate: date})
   };
   text = (e) => {
@@ -29,12 +28,13 @@ class Add extends Component {
     if (this.state.textCase) {
       error = {}
     }
-    let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${this.state.startDate.getMonth()}.${this.state.startDate.getFullYear()}` : '';
+    let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${this.state.startDate.getMonth()+1}.${this.state.startDate.getFullYear()}` : '';
     return <form className='styleAdd' onSubmit={this.props.addCase.bind(null, this.state.textCase, formatDate)}>
       <h2>Add panel</h2>
       <p><input className='inputsAdd' type='text' style={error}
                 onChange={this.text}/></p>
-      <DatePicker className='inputsAdd' selected={this.state.startDate} onChange={this.changeDate}/>
+      <DatePicker className='inputsAdd' dateFormat="dd.MM.yyyy" selected={this.state.startDate}
+                  onChange={this.changeDate}/>
       <p><input type='submit' className='submitBtn' value='save'/></p>
     </form>
 

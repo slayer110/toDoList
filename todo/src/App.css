@@ -34,6 +34,34 @@
     background-color: #BCEBDD;
 }
 
+.styleSort {
+    font-size: 15px;
+    position: absolute;
+    top: 62px;
+    left: 63%;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.styleFilter {
+    font-size: 15px;
+    position: absolute;
+    top: 135px;
+    left: 63%;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.styleSort a:last-child,.styleFilter a:last-child {
+    margin-left: 20px;
+}
+
+.styleSort a {
+    cursor: pointer;
+}
+
 .inputsAdd {
     width: 300px;
     height: 29px;
@@ -144,6 +172,15 @@ tr td:last-child {
 .sort {
     position: absolute;
     top: 14px;
+    left: 62%;
+    cursor: pointer;
+    color: blue;
+    font-weight: bold;
+}
+
+.filter {
+    position: absolute;
+    top: 110px;
     left: 62%;
     cursor: pointer;
     color: blue;
