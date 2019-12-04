@@ -12,7 +12,8 @@ class App extends Component {
         {text: 'Станцевать', done: false, date: '15.06.2019'}
       ],
       startDate: '',
-      visibleAdd: false
+      visibleAdd: false,
+      error: false
     };
   }
 
@@ -24,8 +25,12 @@ class App extends Component {
   };
   addCase = (cases, date, e) => {
     e.preventDefault();
-    this.state.casesInfo.push({text: cases, done: false, date: date});
-    this.setState({casesInfo: this.state.casesInfo, visibleAdd: false})
+    if (cases) {
+      this.state.casesInfo.push({text: cases, done: false, date: date});
+      this.setState({casesInfo: this.state.casesInfo, visibleAdd: false,error:false})
+    } else {
+      this.setState({error:true})
+    }
   };
 
   render() {
@@ -49,7 +54,8 @@ class App extends Component {
           </table>
         </div>
         <button onClick={this.visibleForm} className='btn'>Add</button>
-        {this.state.visibleAdd ? <Add changeDate={this.changeDateForAdd} addCase={this.addCase}/> : ''}
+        {this.state.visibleAdd ?
+          <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error}/> : ''}
       </React.Fragment>
     )
   }
