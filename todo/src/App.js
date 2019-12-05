@@ -10,10 +10,10 @@ class App extends Component {
     super();
     this.state = {
       casesInfo: JSON.parse(localStorage.getItem('casesInfo')) || [
-        {text: 'Помыть пол', done: false, date: '2.4.2019', id: 1},
-        {text: 'Расточить', done: true, date: '2.4.2019', id: 2},
-        {text: 'Найти ключи', done: true, date: '30.8.2019', id: 3},
-        {text: 'Пойти гулять', done: true, date: '8.4.2019', id: 4}
+        {text: 'Помыть пол', done: false, date: '2.04.2019', id: 1},
+        {text: 'Расточить', done: true, date: '2.04.2019', id: 2},
+        {text: 'Найти ключи', done: true, date: '30.08.2019', id: 3},
+        {text: 'Пойти гулять', done: true, date: '8.04.2019', id: 4}
       ],
       startDate: '',
       filterDate: '',
@@ -132,7 +132,17 @@ class App extends Component {
       return false
     }
     let arr;
-    let formatDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+    let that = this;
+
+    function formatMonth() {
+      if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
+        return (date.getMonth() + 1)
+      } else {
+        return `0${date.getMonth() + 1}`
+      }
+    }
+
+    let formatDate = `${date.getDate()}.${formatMonth()}.${date.getFullYear()}`;
     arr = this.state.casesInfo.filter((elem) => {
       return elem[prop] === formatDate
     });

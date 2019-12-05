@@ -22,13 +22,23 @@ class Add extends Component {
 
   render() {
     let error;
+    let that=this;
     if (this.props.mistake) {
       error = {backgroundColor: 'red'}
     }
     if (this.state.textCase) {
       error = {}
     }
-    let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${this.state.startDate.getMonth()+1}.${this.state.startDate.getFullYear()}` : '';
+
+    function formatMonth() {
+      if ((that.state.startDate.getMonth() + 1).toString().length === 2 && (that.state.startDate.getMonth() + 1).toString()[0] !== 1) {
+        return (that.state.startDate.getMonth() + 1)
+      } else {
+        return `0${that.state.startDate.getMonth() + 1}`
+      }
+    }
+
+    let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${formatMonth()}.${this.state.startDate.getFullYear()}` : '';
     return <form className='styleAdd' onSubmit={this.props.addCase.bind(null, this.state.textCase, formatDate)}>
       <h2>Add panel</h2>
       <p><input className='inputsAdd' type='text' style={error}
