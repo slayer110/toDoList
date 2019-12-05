@@ -14,14 +14,7 @@ class Filter extends Component {
   }
 
   changeDate = (prop, date) => {
-    console.log(prop)
     this.props.changeDate(date);
-    // if (prop === 'date') {
-    //   formatDate = `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`;
-    // } else {
-    //   formatDate = prop
-    // }
-    console.log(date)
     this.props.filterDate(prop, date);
     this.setState({startDate: date})
   };

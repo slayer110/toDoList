@@ -10,10 +10,10 @@ class App extends Component {
     super();
     this.state = {
       casesInfo: [
-        {text: 'Помыть пол', done: true, date: '15.8.2008'},
-        {text: 'Расточить', done: true, date: '25.8.2015'},
-        {text: 'Найти ключи', done: true, date: '30.8.2019'},
-        {text: 'Пойти гулять', done: true, date: '2.4.2008'}
+        {text: 'Помыть пол', done: false, date: '2.4.2019', id: 1},
+        {text: 'Расточить', done: true, date: '2.4.2019', id: 2},
+        {text: 'Найти ключи', done: true, date: '30.8.2019', id: 3},
+        {text: 'Пойти гулять', done: true, date: '8.4.2019', id: 4}
       ],
       startDate: '',
       filterDate: '',
@@ -23,7 +23,6 @@ class App extends Component {
       error: false,
       textFilter: '',
       modifiedArr: ''
-
     };
   }
 
@@ -46,19 +45,27 @@ class App extends Component {
   changeDateForFilter = (date) => {
     this.setState({filterDate: date})
   };
+
   addCase = (cases, date, e) => {
     e.preventDefault();
     if (cases) {
-      this.state.casesInfo.push({text: cases, done: false, date: date});
+      this.state.casesInfo.push({
+        text: cases,
+        done: false,
+        date: date,
+        id: this.state.casesInfo[this.state.casesInfo.length - 1].id + 1
+      });
       this.setState({casesInfo: this.state.casesInfo, visibleAdd: false, error: false, textFilter: ''})
     } else {
       this.setState({error: true})
     }
   };
+
   sort = (prop) => {
     let sortedABC = 0;
     let sortedCBA = 0;
     let arr;
+    let that = this;
     let formatFunc = (par) => par.split('.').reverse().join('.');
     let sortABC = (a, b) => {
       if (prop === 'date') {
@@ -78,37 +85,47 @@ class App extends Component {
         if (a[prop] < b[prop]) return 1;
       }
     };
-    if (prop === 'date') {
-      for (let i = 0; i < this.state.casesInfo.length - 1; i++) {
-        if (new Date(formatFunc(this.state.casesInfo[i][prop])) > new Date(formatFunc(this.state.casesInfo[i + 1][prop]))) {
-          sortedCBA++
-        } else {
-          sortedABC++
+
+    function chooseArray(propDouble, arrFromState) {
+      if (propDouble === 'date') {
+        for (let i = 0; i < arrFromState.length - 1; i++) {
+          if (new Date(formatFunc(arrFromState[i][propDouble])) > new Date(formatFunc(arrFromState[i + 1][propDouble]))) {
+            sortedCBA++
+          } else {
+            sortedABC++
+          }
         }
-      }
-    } else {
-      for (let i = 0; i < this.state.casesInfo.length - 1; i++) {
-        if (this.state.casesInfo[i][prop] > this.state.casesInfo[i + 1][prop]) {
-          sortedCBA++
-        } else {
-          sortedABC++
+      } else {
+        for (let i = 0; i < arrFromState.length - 1; i++) {
+          if (arrFromState[i][prop] > arrFromState[i + 1][prop]) {
+            sortedCBA++
+          } else {
+            sortedABC++
+          }
         }
+
       }
 
+      if (sortedABC === arrFromState.length - 1) {
+        arr = arrFromState.sort(sortCBA);
+      }
+      if (sortedCBA === arrFromState.length - 1) {
+        arr = arrFromState.sort(sortABC);
+      }
+      if (sortedABC !== arrFromState.length - 1 && sortedCBA !== arrFromState.length - 1) {
+        arr = arrFromState.sort(sortABC);
+      }
+      that.setState({[arrFromState]: arr})
     }
 
-    if (sortedABC === this.state.casesInfo.length - 1) {
-      arr = this.state.casesInfo.sort(sortCBA);
-    }
-    if (sortedCBA === this.state.casesInfo.length - 1) {
-      arr = this.state.casesInfo.sort(sortABC);
-    }
-    if (sortedABC !== this.state.casesInfo.length - 1 && sortedCBA !== this.state.casesInfo.length - 1) {
-      arr = this.state.casesInfo.sort(sortABC);
-    }
-    this.setState({casesInfo: arr})
+
+    chooseArray(prop, this.state.modifiedArr ? this.state.modifiedArr : this.state.casesInfo)
   };
+
   filterDate = (prop, date) => {
+    if (date === null) {
+      return false
+    }
     let arr;
     let formatDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 
@@ -118,6 +135,7 @@ class App extends Component {
     this.setState({modifiedArr: arr})
 
   };
+
   filterText = (prop, e) => {
     let arr;
     arr = this.state.casesInfo.filter((elem) => {
@@ -127,15 +145,38 @@ class App extends Component {
 
   };
 
+  checkCase = (index) => {
+    let arr = this.state.casesInfo.map((elem, item) => {
+      if (item === index) {
+        return {...elem, done: !elem.done}
+      }
+      return elem
+    });
+    this.setState({casesInfo: arr})
+  };
+  checkCaseModifiedArr = (index) => {
+    function arrChoose(arr) {
+      return arr.map((elem, item) => {
+        if (elem.id === index) {
+          return {...elem, done: !elem.done}
+        }
+        return elem
+      });
+    }
+    this.setState({modifiedArr: arrChoose(this.state.modifiedArr), casesInfo: arrChoose(this.state.casesInfo)})
+  };
+
   render() {
     let cases;
     if (this.state.textFilter || this.state.filterDate) {
       cases = this.state.modifiedArr.map((elem, index) =>
-        <Case key={index} text={elem.text} done={elem.done} date={elem.date}/>
+        <Case key={index} text={elem.text} done={elem.done} date={elem.date} typeArr='modify' id={elem.id}
+              checkCaseModifiedArr={this.checkCaseModifiedArr}/>
       );
     } else {
       cases = this.state.casesInfo.map((elem, index) =>
-        <Case key={index} text={elem.text} done={elem.done} date={elem.date}/>
+        <Case key={index} keyFor={index} text={elem.text} done={elem.done} date={elem.date}
+              checkCase={this.checkCase}/>
       );
     }
 
