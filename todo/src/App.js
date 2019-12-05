@@ -9,7 +9,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      casesInfo: [
+      casesInfo: JSON.parse(localStorage.getItem('casesInfo'))||[
         {text: 'Помыть пол', done: false, date: '2.4.2019', id: 1},
         {text: 'Расточить', done: true, date: '2.4.2019', id: 2},
         {text: 'Найти ключи', done: true, date: '30.8.2019', id: 3},
@@ -55,7 +55,9 @@ class App extends Component {
         date: date,
         id: this.state.casesInfo[this.state.casesInfo.length - 1].id + 1
       });
-      this.setState({casesInfo: this.state.casesInfo, visibleAdd: false, error: false, textFilter: ''})
+      this.setState({casesInfo: this.state.casesInfo, visibleAdd: false, error: false, textFilter: ''}, () => {
+        localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
+      })
     } else {
       this.setState({error: true})
     }
@@ -115,7 +117,9 @@ class App extends Component {
       if (sortedABC !== arrFromState.length - 1 && sortedCBA !== arrFromState.length - 1) {
         arr = arrFromState.sort(sortABC);
       }
-      that.setState({[arrFromState]: arr})
+      that.setState({[arrFromState]: arr}, () => {
+        localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
+      })
     }
 
 
@@ -152,7 +156,9 @@ class App extends Component {
       }
       return elem
     });
-    this.setState({casesInfo: arr})
+    this.setState({casesInfo: arr},() => {
+      localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
+    })
   };
   checkCaseModifiedArr = (index) => {
     function arrChoose(arr) {
@@ -163,7 +169,10 @@ class App extends Component {
         return elem
       });
     }
-    this.setState({modifiedArr: arrChoose(this.state.modifiedArr), casesInfo: arrChoose(this.state.casesInfo)})
+
+    this.setState({modifiedArr: arrChoose(this.state.modifiedArr), casesInfo: arrChoose(this.state.casesInfo)}, () => {
+      localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
+    })
   };
 
   render() {
