@@ -105,7 +105,6 @@ class App extends Component {
             sortedABC++
           }
         }
-
       }
 
       if (sortedABC === arrFromState.length - 1) {
@@ -119,6 +118,8 @@ class App extends Component {
       }
       that.setState({
         [arrFromState]: arr
+      }, () => {
+        localStorage.setItem('casesInfo', JSON.stringify(arrFromState))
       })
     }
 

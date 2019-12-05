@@ -8,7 +8,7 @@ class Case extends Component {
         <td>{this.props.text}</td>
         <td>{this.props.date}</td>
         <td><input type='checkbox' checked={this.props.done}
-                   onChange={this.props.typeArr ? this.props.checkCaseModifiedArr.bind(null,this.props.id) : this.props.checkCase.bind(null, this.props.keyFor)}/>
+                   onChange={this.props.typeArr ? this.props.checkCaseModifiedArr.bind(null, this.props.id) : this.props.checkCase.bind(null, this.props.keyFor)}/>
         </td>
       </tr>
     );
