@@ -48,12 +48,23 @@ class App extends Component {
 
   addCase = (cases, date, e) => {
     e.preventDefault();
+
+    function unicId(arr) {
+      let max = 0;
+      for (let i in arr) {
+        if (arr[i].id > arr[max].id) {
+          max = i
+        }
+      }
+      return arr[max].id
+    }
+
     if (cases) {
       this.state.casesInfo.push({
         text: cases,
         done: false,
         date: date,
-        id: this.state.casesInfo[this.state.casesInfo.length - 1].id + 1
+        id: unicId(this.state.casesInfo) + 1
       });
       this.setState({casesInfo: this.state.casesInfo, visibleAdd: false, error: false, textFilter: ''}, () => {
         localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
@@ -161,7 +172,7 @@ class App extends Component {
 
   checkCase = (index) => {
     let arr = this.state.casesInfo.map((elem, item) => {
-      if (item === index) {
+      if (elem.id === index) {
         return {...elem, done: !elem.done}
       }
       return elem
@@ -186,6 +197,7 @@ class App extends Component {
   };
 
   render() {
+    console.log(JSON.parse(localStorage.getItem('casesInfo')))
     let cases;
     if (this.state.textFilter || this.state.filterDate) {
       cases = this.state.modifiedArr.map((elem, index) =>
@@ -194,11 +206,10 @@ class App extends Component {
       );
     } else {
       cases = this.state.casesInfo.map((elem, index) =>
-        <Case key={index} keyFor={index} text={elem.text} done={elem.done} date={elem.date}
+        <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
               checkCase={this.checkCase}/>
       );
     }
-
     return (<React.Fragment>
         <div className='cases'>
           <h1>Cases</h1>
