@@ -22,7 +22,7 @@ class Add extends Component {
 
   render() {
     let error;
-    let that=this;
+    let that = this;
     if (this.props.mistake) {
       error = {backgroundColor: 'red'}
     }

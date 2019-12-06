@@ -13,18 +13,18 @@ class Filter extends Component {
     }
   }
 
-  changeDate = (prop, date) => {
-    this.props.changeDate(date);
-    this.props.filterDate(prop, date);
+  changeDate = (date) => {
+    this.props.changeDateFilter(date);
+    // this.props.filterDate(prop, date);
     this.setState({startDate: date})
   };
 
   render() {
     return <div className='styleFilter'>
       <a>By tasks</a>
-      <input type='text' value={this.props.text} onChange={this.props.filterText.bind(null, 'text')}/>
+      <input type='text' value={this.props.text} onChange={this.props.filterText}/>
       <a>By date</a>
-      <DatePicker dateFormat="dd.MM.yyyy" onChange={this.changeDate.bind(null, 'date')}
+      <DatePicker dateFormat="dd.MM.yyyy" onChange={this.changeDate}
                   selected={this.state.startDate}/>
     </div>
   }
