@@ -15,7 +15,6 @@ class Filter extends Component {
 
   changeDate = (date) => {
     this.props.changeDateFilter(date);
-    // this.props.filterDate(prop, date);
     this.setState({startDate: date})
   };
 

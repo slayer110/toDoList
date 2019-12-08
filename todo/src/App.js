@@ -10,10 +10,10 @@ class App extends Component {
     super();
     this.state = {
       casesInfo: JSON.parse(localStorage.getItem('casesInfo')) || [
-        {text: 'в', done: false, date: '2.04.2019', id: 1},
-        {text: 'б', done: true, date: '2.04.2019', id: 2},
-        {text: 'а', done: true, date: '30.08.2019', id: 3},
-        {text: 'г', done: true, date: '8.04.2019', id: 4}
+        {text: 'Виктор', done: false, date: '2.04.2019', id: 1},
+        {text: 'Валера', done: true, date: '2.04.2019', id: 2},
+        {text: 'Жанна', done: true, date: '2.04.2019', id: 3},
+        {text: 'Геннадий', done: true, date: '8.04.2019', id: 4}
       ],
       startDate: '',
       filterDate: '',
@@ -22,12 +22,16 @@ class App extends Component {
       visibleFilter: false,
       error: false,
       textFilter: '',
-      sort: ''
+      sort: {type: '', direction: ''},
     };
   }
 
   visibleAddForm = () => {
-    this.setState({visibleAdd: !this.state.visibleAdd});
+    this.setState(function (state) {
+      return {
+        visibleAdd: !state.visibleAdd
+      }
+    });
   };
 
   visibleSortForm = () => {
@@ -43,7 +47,6 @@ class App extends Component {
   };
 
   changeDateForFilter = (date) => {
-    console.log(date)
     this.setState({filterDate: date})
   };
 
@@ -75,134 +78,32 @@ class App extends Component {
     }
   };
   setSort = (sort) => {
-    this.setState({sort: sort})
+    let srt;
+    if (this.state.sort.direction) {
+      if (this.state.sort.direction === 'sortABC') {
+        srt = 'sortCBA';
+      } else {
+        srt = 'sortABC'
+      }
+    }
+    this.setState({sort: {type: sort, direction: srt}})
   };
 
-  // sortABC = (a, b) => {
-  //   //     if (prop === 'date') {
-  //   //       if (new Date(formatFunc(a[prop])) > new Date(formatFunc(b[prop]))) return 1;
-  //   //       if (new Date(formatFunc(a[prop])) < new Date(formatFunc(b[prop]))) return -1;
-  //   //     } else {
-  //   if (a['text'] > b['text']) return 1;
-  //   if (a['text'] < b['text']) return -1;
-  // }
-  // sort = (prop) => {
-  //   let sortedABC = 0;
-  //   let sortedCBA = 0;
-  //   let arr;
-  //   let that = this;
-  //   let formatFunc = (par) => par.split('.').reverse().join('.');
-  //   let sortABC = (a, b) => {
-  //     if (prop === 'date') {
-  //       if (new Date(formatFunc(a[prop])) > new Date(formatFunc(b[prop]))) return 1;
-  //       if (new Date(formatFunc(a[prop])) < new Date(formatFunc(b[prop]))) return -1;
-  //     } else {
-  //     if (a[prop] > b[prop]) return 1;
-  //     if (a[prop] < b[prop]) return -1;
-  //   }
-  // };
-  //   let sortCBA = (a, b) => {
-  //     if (prop === 'date') {
-  //       if (new Date(formatFunc(a[prop])) > new Date(formatFunc(b[prop]))) return -1;
-  //       if (new Date(formatFunc(a[prop])) < new Date(formatFunc(b[prop]))) return 1;
-  //     } else {
-  //       if (a[prop] > b[prop]) return -1;
-  //       if (a[prop] < b[prop]) return 1;
-  //     }
-  //   };
-  //
-  //   function chooseArray(propDouble, arrFromState) {
-  //     if (propDouble === 'date') {
-  //       for (let i = 0; i < arrFromState.length - 1; i++) {
-  //         if (new Date(formatFunc(arrFromState[i][propDouble])) > new Date(formatFunc(arrFromState[i + 1][propDouble]))) {
-  //           sortedCBA++
-  //         } else {
-  //           sortedABC++
-  //         }
-  //       }
-  //     } else {
-  //       for (let i = 0; i < arrFromState.length - 1; i++) {
-  //         if (arrFromState[i][prop] > arrFromState[i + 1][prop]) {
-  //           sortedCBA++
-  //         } else {
-  //           sortedABC++
-  //         }
-  //       }
-  //     }
-  //
-  //     if (sortedABC === arrFromState.length - 1) {
-  //       arr = arrFromState.sort(sortCBA);
-  //     }
-  //     if (sortedCBA === arrFromState.length - 1) {
-  //       arr = arrFromState.sort(sortABC);
-  //     }
-  //     if (sortedABC !== arrFromState.length - 1 && sortedCBA !== arrFromState.length - 1) {
-  //       arr = arrFromState.sort(sortABC);
-  //     }
-  //     that.setState({
-  //       [arrFromState]: arr
-  //     }, () => {
-  //       localStorage.setItem('casesInfo', JSON.stringify(arrFromState))
-  //     })
-  //   }
-  //
-  //
-  //   chooseArray(prop, this.state.modifiedArr ? this.state.modifiedArr : this.state.casesInfo)
-  // };
-  //
-  // filterDate = (prop, date) => {
-  //   if (date === null) {
-  //     return false
-  //   }
-  //   let arr;
-  //   let that = this;
-  //
-  //   function formatMonth() {
-  //     if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
-  //       return (date.getMonth() + 1)
-  //     } else {
-  //       return `0${date.getMonth() + 1}`
-  //     }
-  //   }
-  //
-  //   let formatDate = `${date.getDate()}.${formatMonth()}.${date.getFullYear()}`;
-  //   arr = this.state.casesInfo.filter((elem) => {
-  //     return elem[prop] === formatDate
-  //   });
-  //   this.setState({modifiedArr: arr})
-  //
-  // };
-  //
   filterText = (e) => {
     this.setState({textFilter: e.target.value})
   };
-  //
-  // checkCase = (index) => {
-  //   let arr = this.state.casesInfo.map((elem, item) => {
-  //     if (elem.id === index) {
-  //       return {...elem, done: !elem.done}
-  //     }
-  //     return elem
-  //   });
-  //   this.setState({casesInfo: arr}, () => {
-  //     localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
-  //   })
-  // };
-  // checkCaseModifiedArr = (index) => {
-  //   function arrChoose(arr) {
-  //     return arr.map((elem, item) => {
-  //       if (elem.id === index) {
-  //         return {...elem, done: !elem.done}
-  //       }
-  //       return elem
-  //     });
-  //   }
-  //
-  //   this.setState({modifiedArr: arrChoose(this.state.modifiedArr), casesInfo: arrChoose(this.state.casesInfo)}, () => {
-  //     localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
-  //   })
-  // };
-  sort = (prop, arrFilter) => {
+  checkCase = (index) => {
+    let arr = this.state.casesInfo.map((elem, item) => {
+      if (elem.id === index) {
+        return {...elem, done: !elem.done}
+      }
+      return elem
+    });
+    this.setState({casesInfo: arr}, () => {
+      localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
+    })
+  };
+  sort = (prop, arrSort,sortFunction) => {
     let sortedABC = 0;
     let sortedCBA = 0;
     let that = this;
@@ -228,16 +129,16 @@ class App extends Component {
 
 
     if (prop === 'date') {
-      for (let i = 0; i < arrFilter.length - 1; i++) {
-        if (new Date(formatFunc(arrFilter[i][prop])) > new Date(formatFunc(arrFilter[i + 1][prop]))) {
+      for (let i = 0; i < arrSort.length - 1; i++) {
+        if (new Date(formatFunc(arrSort[i][prop])) > new Date(formatFunc(arrSort[i + 1][prop]))) {
           sortedCBA++
         } else {
           sortedABC++
         }
       }
     } else {
-      for (let i = 0; i < arrFilter.length - 1; i++) {
-        if (arrFilter[i][prop] > arrFilter[i + 1][prop]) {
+      for (let i = 0; i < arrSort.length - 1; i++) {
+        if (arrSort[i][prop] > arrSort[i + 1][prop]) {
           sortedCBA++
         } else {
           sortedABC++
@@ -245,21 +146,31 @@ class App extends Component {
       }
     }
 
-    if (sortedABC === arrFilter.length - 1) {
-      return sortCBA;
-    }
-    if (sortedCBA === arrFilter.length - 1) {
-      return sortABC;
-    }
-    if (sortedABC !== arrFilter.length - 1 && sortedCBA !== arrFilter.length - 1) {
-      return sortABC;
-    }
+    if (!this.state.sort.direction) {
+      if (sortedABC === arrSort.length - 1) {
+        this.state.sort = {type: prop, direction: 'sortCBA'};
+        return sortCBA;
+      }
+      if (sortedCBA === arrSort.length - 1) {
+        this.state.sort = {type: prop, direction: 'sortABC'};
+        return sortABC;
+      }
+      if (sortedABC !== arrSort.length - 1 && sortedCBA !== arrSort.length - 1) {
+        this.state.sort={type: prop, direction: 'sortABC'};
+        return sortABC;
+      }
+    } else {
 
+      if (this.state.sort.direction === 'sortABC') {
+        return sortABC
+      } else {
+        return sortCBA
+      }
+    }
   };
 
-  filterAndSort(arr, text, date, sortArr) {
+  filterAndSort(arr, text, date, sortType) {
     let arrFilter;
-
     function formatMonth() {
       if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
         return (date.getMonth() + 1)
@@ -281,8 +192,8 @@ class App extends Component {
         return elem['date'] === formatDate
       });
     }
-    if (sortArr) {
-      arrFilter = arrFilter.sort(this.sort(sortArr, arrFilter))
+    if (sortType['type']) {
+      arrFilter = arrFilter.sort(this.sort(sortType['type'], arrFilter));
     }
     return arrFilter.map((elem, index) =>
       <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
@@ -291,12 +202,9 @@ class App extends Component {
   }
 
   render() {
-    localStorage.clear();
     let cases = this.state.casesInfo.map((elem, index) =>
       <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
             checkCase={this.checkCase}/>);
-    console.log(this.state.casesInfo)
-
     return (<React.Fragment>
         <div className='cases'>
           <h1>Cases</h1>
@@ -316,7 +224,7 @@ class App extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.state.textFilter || this.state.filterDate || this.state.sort ? this.filterAndSort(this.state.casesInfo, this.state.textFilter, this.state.filterDate, this.state.sort) : cases}
+            {this.state.textFilter || this.state.filterDate || this.state.sort.direction || this.state.sort.type ? this.filterAndSort(this.state.casesInfo, this.state.textFilter, this.state.filterDate, this.state.sort) : cases}
             </tbody>
           </table>
         </div>
