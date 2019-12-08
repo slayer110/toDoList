@@ -10,10 +10,10 @@ class App extends Component {
     super();
     this.state = {
       casesInfo: JSON.parse(localStorage.getItem('casesInfo')) || [
-        {text: 'Виктор', done: false, date: '2.04.2019', id: 1},
-        {text: 'Валера', done: true, date: '2.04.2019', id: 2},
-        {text: 'Жанна', done: true, date: '2.04.2019', id: 3},
-        {text: 'Геннадий', done: true, date: '8.04.2019', id: 4}
+        {text: 'Валера', done: false, date: '2.04.2019', id: 1},
+        {text: 'Виктор', done: true, date: '5.04.2019', id: 2},
+        {text: 'Ганна', done: true, date: '2.04.2019', id: 3},
+        {text: 'Женя', done: true, date: '8.04.2019', id: 4}
       ],
       startDate: '',
       filterDate: '',
@@ -78,6 +78,9 @@ class App extends Component {
     }
   };
   setSort = (sort) => {
+    if (this.state.sort.type !== sort) {
+      this.state.sort.direction = '';
+    }
     let srt;
     if (this.state.sort.direction) {
       if (this.state.sort.direction === 'sortABC') {
@@ -103,10 +106,10 @@ class App extends Component {
       localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
     })
   };
-  sort = (prop, arrSort,sortFunction) => {
+  sort = (prop, arrSort) => {
+    console.log(arrSort, arrSort[0]);
     let sortedABC = 0;
     let sortedCBA = 0;
-    let that = this;
     let formatFunc = (par) => par.split('.').reverse().join('.');
     let sortABC = (a, b) => {
       if (prop === 'date') {
@@ -135,6 +138,7 @@ class App extends Component {
         } else {
           sortedABC++
         }
+
       }
     } else {
       for (let i = 0; i < arrSort.length - 1; i++) {
@@ -156,7 +160,7 @@ class App extends Component {
         return sortABC;
       }
       if (sortedABC !== arrSort.length - 1 && sortedCBA !== arrSort.length - 1) {
-        this.state.sort={type: prop, direction: 'sortABC'};
+        this.state.sort = {type: prop, direction: 'sortABC'};
         return sortABC;
       }
     } else {
@@ -170,7 +174,9 @@ class App extends Component {
   };
 
   filterAndSort(arr, text, date, sortType) {
-    let arrFilter;
+    let arrModified;
+    let arrSort = false;
+
     function formatMonth() {
       if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
         return (date.getMonth() + 1)
@@ -180,28 +186,28 @@ class App extends Component {
     }
 
     if (text) {
-      arrFilter = arr.filter((elem) => {
-        return elem['text'].toLowerCase().indexOf(this.state.textFilter) === 0
+      arrModified = arr.filter((elem) => {
+        return elem['text'].toLowerCase().indexOf(this.state.textFilter.toLowerCase()) === 0
       });
+
     } else {
-      arrFilter = arr
+      arrModified = arr
     }
     if (date) {
       let formatDate = `${date.getDate()}.${formatMonth()}.${date.getFullYear()}`;
-      arrFilter = arrFilter.filter((elem) => {
+      arrModified = arrModified.filter((elem) => {
         return elem['date'] === formatDate
       });
     }
     if (sortType['type']) {
-      arrFilter = arrFilter.sort(this.sort(sortType['type'], arrFilter));
+      arrModified.sort(this.sort(sortType['type'], arrModified));
     }
-    return arrFilter.map((elem, index) =>
-      <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
-            checkCase={this.checkCase}/>)
-
+    return arrModified.map((elem, index) =>
+      <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
   }
 
   render() {
+    localStorage.clear()
     let cases = this.state.casesInfo.map((elem, index) =>
       <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
             checkCase={this.checkCase}/>);
