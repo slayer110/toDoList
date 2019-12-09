@@ -12,9 +12,11 @@ class App extends Component {
       casesInfo: JSON.parse(localStorage.getItem('casesInfo')) || [
         {text: 'Валера', done: false, date: '2.04.2019', id: 1},
         {text: 'Виктор', done: true, date: '5.04.2019', id: 2},
-        {text: 'Ганна', done: true, date: '2.04.2019', id: 3},
+        {text: 'Анна', done: true, date: '2.04.2019', id: 3},
         {text: 'Женя', done: true, date: '8.04.2019', id: 4},
-        {text: 'Ангелина', done: false, date: '2.04.2021', id: 5}
+        {text: 'Абибок', done: false, date: '2.04.2021', id: 5},
+        {text: 'Авевтина', done: false, date: '2.04.2021', id: 5},
+        {text: 'Агея', done: false, date: '2.04.2021', id: 5}
       ],
       startDate: '',
       filterDate: '',
@@ -72,17 +74,21 @@ class App extends Component {
     }
   };
   setSort = (sort) => {
-    let srt;
+    let direct;
+    if (this.state.sort.type !== sort) {
+      this.state.sort.direction = ''
+    }
     if (this.state.sort.direction) {
       if (this.state.sort.direction === 'sortCBA') {
-        srt = 'sortABC'
+        direct = 'sortABC'
       } else {
-        srt = 'sortCBA'
+        direct = 'sortCBA'
       }
     } else {
-      srt = ''
+      direct = ''
     }
-    this.setState({sort: {direction: srt, type: sort}})
+    console.log(this.state.sort.direction, sort)
+    this.setState({sort: {direction: direct, type: sort}})
   };
 
   filterText = (e) => {
@@ -100,6 +106,7 @@ class App extends Component {
     })
   };
   sort = (prop, arrSort) => {
+    console.log('массив после фильтрации', arrSort[0], arrSort[1])
     let sortedABC = 0;
     let sortedCBA = 0;
     let formatFunc = (par) => par.split('.').reverse().join('.');
@@ -143,7 +150,6 @@ class App extends Component {
     }
 
     if (!this.state.sort.direction) {
-
       if (sortedABC === arrSort.length - 1) {
         this.state.sort.direction = 'sortCBA';
         return sortCBA;
@@ -167,7 +173,7 @@ class App extends Component {
 
 
   filterAndSort(arr, text, date, sortType) {
-
+    console.log('параметры функции', ...arguments)
     let arrModified;
 
     function formatMonth() {
@@ -193,12 +199,14 @@ class App extends Component {
     }
     if (sortType['type']) {
       arrModified.sort(this.sort(sortType['type'], arrModified));
+      console.log('массив после фильтрации', arrModified[0], arrModified[1])
     }
     return arrModified.map((elem, index) =>
       <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
   }
 
   render() {
+    console.log(this.state.sort.direction)
     let cases = this.state.casesInfo.map((elem, index) =>
       <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
             checkCase={this.checkCase}/>);
