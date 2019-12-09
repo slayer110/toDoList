@@ -13,7 +13,8 @@ class App extends Component {
         {text: 'Валера', done: false, date: '2.04.2019', id: 1},
         {text: 'Виктор', done: true, date: '5.04.2019', id: 2},
         {text: 'Ганна', done: true, date: '2.04.2019', id: 3},
-        {text: 'Женя', done: true, date: '8.04.2019', id: 4}
+        {text: 'Женя', done: true, date: '8.04.2019', id: 4},
+        {text: 'Ангелина', done: false, date: '2.04.2021', id: 5}
       ],
       startDate: '',
       filterDate: '',
@@ -34,13 +35,6 @@ class App extends Component {
     });
   };
 
-  visibleSortForm = () => {
-    this.setState({visibleSort: !this.state.visibleSort});
-  };
-
-  visibleFilterForm = () => {
-    this.setState({visibleFilter: !this.state.visibleFilter});
-  };
 
   changeDateForAdd = (date) => {
     this.setState({startDate: date})
@@ -78,18 +72,17 @@ class App extends Component {
     }
   };
   setSort = (sort) => {
-    if (this.state.sort.type !== sort) {
-      this.state.sort.direction = '';
-    }
     let srt;
     if (this.state.sort.direction) {
-      if (this.state.sort.direction === 'sortABC') {
-        srt = 'sortCBA';
-      } else {
+      if (this.state.sort.direction === 'sortCBA') {
         srt = 'sortABC'
+      } else {
+        srt = 'sortCBA'
       }
+    } else {
+      srt = ''
     }
-    this.setState({sort: {type: sort, direction: srt}})
+    this.setState({sort: {direction: srt, type: sort}})
   };
 
   filterText = (e) => {
@@ -107,7 +100,6 @@ class App extends Component {
     })
   };
   sort = (prop, arrSort) => {
-    console.log(arrSort, arrSort[0]);
     let sortedABC = 0;
     let sortedCBA = 0;
     let formatFunc = (par) => par.split('.').reverse().join('.');
@@ -151,20 +143,20 @@ class App extends Component {
     }
 
     if (!this.state.sort.direction) {
+
       if (sortedABC === arrSort.length - 1) {
-        this.state.sort = {type: prop, direction: 'sortCBA'};
+        this.state.sort.direction = 'sortCBA';
         return sortCBA;
       }
       if (sortedCBA === arrSort.length - 1) {
-        this.state.sort = {type: prop, direction: 'sortABC'};
+        this.state.sort.direction = 'sortABC';
         return sortABC;
       }
       if (sortedABC !== arrSort.length - 1 && sortedCBA !== arrSort.length - 1) {
-        this.state.sort = {type: prop, direction: 'sortABC'};
+        this.state.sort.direction = 'sortABC';
         return sortABC;
       }
     } else {
-
       if (this.state.sort.direction === 'sortABC') {
         return sortABC
       } else {
@@ -173,9 +165,10 @@ class App extends Component {
     }
   };
 
+
   filterAndSort(arr, text, date, sortType) {
+
     let arrModified;
-    let arrSort = false;
 
     function formatMonth() {
       if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
@@ -189,7 +182,6 @@ class App extends Component {
       arrModified = arr.filter((elem) => {
         return elem['text'].toLowerCase().indexOf(this.state.textFilter.toLowerCase()) === 0
       });
-
     } else {
       arrModified = arr
     }
@@ -207,20 +199,16 @@ class App extends Component {
   }
 
   render() {
-    localStorage.clear()
     let cases = this.state.casesInfo.map((elem, index) =>
       <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
             checkCase={this.checkCase}/>);
     return (<React.Fragment>
         <div className='cases'>
           <h1>Cases</h1>
-          <p className='sort' onClick={this.visibleSortForm}
-             style={this.state.visibleSort ? {textDecoration: 'underline'} : {}}>sort</p>
-          <p className='filter' onClick={this.visibleFilterForm}
-             style={this.state.visibleFilter ? {textDecoration: 'underline'} : {}}>filter</p>
-          {this.state.visibleFilter ?
-            <Filter filterText={this.filterText} changeDateFilter={this.changeDateForFilter}
-                    text={this.state.textFilter}/> : ''}
+          <p className='sort'>sort</p>
+          <p className='filter'>filter</p>
+          <Filter filterText={this.filterText} changeDateFilter={this.changeDateForFilter}
+                  text={this.state.textFilter}/>
           <table>
             <thead>
             <tr>
@@ -237,7 +225,7 @@ class App extends Component {
         <button onClick={this.visibleAddForm} className='btn'>Add</button>
         {this.state.visibleAdd ?
           <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error}/> : ''}
-        {this.state.visibleSort ? <Sort sortFunc={this.setSort}/> : ''}
+        <Sort sortFunc={this.setSort}/>
       </React.Fragment>
     )
   }
