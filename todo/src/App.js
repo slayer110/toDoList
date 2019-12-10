@@ -21,7 +21,7 @@ class App extends Component {
       visibleFilter: false,
       error: {text: false, date: false},
       textFilter: '',
-      sort: {type: '', direction: ''},
+      sort:JSON.parse(localStorage.getItem('sort'))|| {type: '', direction: ''},
     };
   }
 
@@ -192,6 +192,7 @@ class App extends Component {
       arrModified.sort(this.sortCBA(sort.type)).map((elem, index) =>
         <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
     }
+    localStorage.setItem('sort', JSON.stringify(this.state.sort));
     return arrModified.map((elem, index) =>
       <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
   }
