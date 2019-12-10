@@ -3,7 +3,7 @@ import './App.css';
 import Case from './Cases';
 import Add from './formAdd';
 import Sort from './formSort'
-
+import Filter from './formFilter'
 
 
 class App extends Component {
@@ -115,13 +115,23 @@ class App extends Component {
       }
       return elem
     });
-    this.setState({casesInfo: arr}, () => {
-      localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
-    })
+    this.setState(function () {
+        return {
+          casesInfo: arr
+        }
+      },
+      () => {
+        localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
+      }
+    );
   };
 
   direction = (prop, direction) => {
-    this.setState({sort: {type: prop, direction: direction}})
+    this.setState(function () {
+      return {
+        sort: {type: prop, direction: direction}
+      }
+    });
   };
 
   sortABC(prop) {
@@ -153,7 +163,6 @@ class App extends Component {
 
   filterAndSort(arr, text, date, sort) {
     let arrModified = arr;
-
     function formatMonth() {
       if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
         return (date.getMonth() + 1)

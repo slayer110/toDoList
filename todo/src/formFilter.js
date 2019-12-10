@@ -15,7 +15,11 @@ class Filter extends Component {
 
   changeDate = (date) => {
     this.props.changeDateFilter(date);
-    this.setState({startDate: date})
+    this.setState(function () {
+      return {
+        startDate: date
+      }
+    });
   };
 
   render() {
