@@ -4,6 +4,8 @@ import Case from './Cases';
 import Add from './formAdd';
 import Sort from './formSort'
 import Filter from './formFilter'
+import {loadOptions} from "@babel/core";
+
 
 class App extends Component {
   constructor() {
@@ -12,18 +14,13 @@ class App extends Component {
       casesInfo: JSON.parse(localStorage.getItem('casesInfo')) || [
         {text: 'Валера', done: false, date: '2.04.2019', id: 1},
         {text: 'Виктор', done: true, date: '5.04.2019', id: 2},
-        {text: 'Ад', done: true, date: '2.04.2019', id: 3},
-        {text: 'Женя', done: true, date: '8.04.2019', id: 4},
-        {text: 'Аг', done: false, date: '2.04.2021', id: 5},
-        {text: 'Ав', done: false, date: '2.04.2021', id: 5},
-        {text: 'Аа', done: false, date: '2.04.2021', id: 5}
       ],
       startDate: '',
       filterDate: '',
       visibleAdd: false,
       visibleSort: false,
       visibleFilter: false,
-      error: false,
+      error: {text: false, date: false},
       textFilter: '',
       sort: {type: '', direction: ''},
     };
@@ -39,11 +36,19 @@ class App extends Component {
 
 
   changeDateForAdd = (date) => {
-    this.setState({startDate: date})
+    this.setState(function (state) {
+      return {
+        startDate: date
+      }
+    });
   };
 
   changeDateForFilter = (date) => {
-    this.setState({filterDate: date})
+    this.setState(function (state) {
+      return {
+        filterDate: date
+      }
+    });
   };
 
   addCase = (cases, date, e) => {
@@ -59,43 +64,41 @@ class App extends Component {
       return arr[max].id
     }
 
-    if (cases) {
+    if (cases && date) {
       this.state.casesInfo.push({
         text: cases,
         done: false,
         date: date,
         id: unicId(this.state.casesInfo) + 1
       });
+      // this.setState(function (state) {
+      //   return {
+      //     filterDate: date
+      //   }
+      // });
       this.setState({casesInfo: this.state.casesInfo, visibleAdd: false, error: false, textFilter: ''}, () => {
         localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
       })
     } else {
-      this.setState({error: true})
-    }
-  };
-  setSort = (sort) => {
-    let direct;
-    if (this.state.sort.type !== sort) {
-      this.state.sort.direction = ''
-    }
-    if (this.state.sort.direction) {
-      if (this.state.sort.direction === 'sortCBA') {
-        direct = 'sortABC'
-      } else {
-        direct = 'sortCBA'
+      let errorType;
+      if (!cases) {
+        errorType = {text: true, date: false};
       }
-    } else {
-      direct = ''
+      if (!date) {
+        errorType = {text: true, date: false};
+      }
+      if (!date && !date) {
+        errorType = {text: true, date: true};
+      }
+      this.setState({error: errorType})
     }
-    console.log(this.state.sort.direction, sort)
-    this.setState({sort: {direction: direct, type: sort}})
   };
 
   filterText = (e) => {
     this.setState({textFilter: e.target.value})
   };
   checkCase = (index) => {
-    let arr = this.state.casesInfo.map((elem, item) => {
+    let arr = this.state.casesInfo.map((elem) => {
       if (elem.id === index) {
         return {...elem, done: !elem.done}
       }
@@ -105,12 +108,14 @@ class App extends Component {
       localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
     })
   };
-  sort = (prop, arrSort) => {
-    console.log('массив после фильтрации', arrSort[0], arrSort[arrSort.length - 1]);
-    let sortedABC = 0;
-    let sortedCBA = 0;
+
+  direction = (prop, direction) => {
+    this.setState({sort: {type: prop, direction: direction}})
+  };
+
+  sortABC(prop) {
     let formatFunc = (par) => par.split('.').reverse().join('.');
-    let sortABC = (a, b) => {
+    return (a, b) => {
       if (prop === 'date') {
         if (new Date(formatFunc(a[prop])) > new Date(formatFunc(b[prop]))) return 1;
         if (new Date(formatFunc(a[prop])) < new Date(formatFunc(b[prop]))) return -1;
@@ -119,7 +124,11 @@ class App extends Component {
         if (a[prop] < b[prop]) return -1;
       }
     };
-    let sortCBA = (a, b) => {
+  }
+
+  sortCBA(prop) {
+    let formatFunc = (par) => par.split('.').reverse().join('.');
+    return (a, b) => {
       if (prop === 'date') {
         if (new Date(formatFunc(a[prop])) > new Date(formatFunc(b[prop]))) return -1;
         if (new Date(formatFunc(a[prop])) < new Date(formatFunc(b[prop]))) return 1;
@@ -128,53 +137,11 @@ class App extends Component {
         if (a[prop] < b[prop]) return 1;
       }
     };
+  }
 
 
-    if (prop === 'date') {
-      for (let i = 0; i < arrSort.length - 1; i++) {
-        if (new Date(formatFunc(arrSort[i][prop])) > new Date(formatFunc(arrSort[i + 1][prop]))) {
-          sortedCBA++
-        } else {
-          sortedABC++
-        }
-
-      }
-    } else {
-      for (let i = 0; i < arrSort.length - 1; i++) {
-        if (arrSort[i][prop] > arrSort[i + 1][prop]) {
-          sortedCBA++
-        } else {
-          sortedABC++
-        }
-      }
-    }
-
-    if (!this.state.sort.direction) {
-      if (sortedABC === arrSort.length - 1) {
-        this.state.sort.direction = 'sortCBA';
-        return sortCBA;
-      }
-      if (sortedCBA === arrSort.length - 1) {
-        this.state.sort.direction = 'sortABC';
-        return sortABC;
-      }
-      if (sortedABC !== arrSort.length - 1 && sortedCBA !== arrSort.length - 1) {
-        this.state.sort.direction = 'sortABC';
-        return sortABC;
-      }
-    } else {
-      if (this.state.sort.direction === 'sortABC') {
-        return sortABC
-      } else {
-        return sortCBA
-      }
-    }
-  };
-
-
-  filterAndSort(arr, text, date, sortType) {
-    console.log('параметры функции', text, date, sortType)
-    let arrModified;
+  filterAndSort(arr, text, date, sort) {
+    let arrModified = arr;
 
     function formatMonth() {
       if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
@@ -189,7 +156,7 @@ class App extends Component {
         return elem['text'].toLowerCase().indexOf(this.state.textFilter.toLowerCase()) === 0
       });
     } else {
-      arrModified = arr
+      arrModified = arr;
     }
     if (date) {
       let formatDate = `${date.getDate()}.${formatMonth()}.${date.getFullYear()}`;
@@ -197,18 +164,19 @@ class App extends Component {
         return elem['date'] === formatDate
       });
     }
-    if (sortType['type']) {
-      arrModified.sort(this.sort(sortType['type'], arrModified));
-      console.log('массив после сортировки', arrModified)
+    if (sort.direction === 'Up') {
+      arrModified.sort(this.sortABC(sort.type)).map((elem, index) =>
+        <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
+    }
+    if (sort.direction === 'Down') {
+      arrModified.sort(this.sortCBA(sort.type)).map((elem, index) =>
+        <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
     }
     return arrModified.map((elem, index) =>
       <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
   }
 
   render() {
-    let cases = this.state.casesInfo.map((elem, index) =>
-      <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
-            checkCase={this.checkCase}/>);
     return (<React.Fragment>
         <div className='cases'>
           <h1>Cases</h1>
@@ -225,14 +193,14 @@ class App extends Component {
             </tr>
             </thead>
             <tbody>
-            {this.state.textFilter || this.state.filterDate || this.state.sort.direction || this.state.sort.type ? this.filterAndSort(this.state.casesInfo, this.state.textFilter, this.state.filterDate, this.state.sort) : cases}
+            {this.filterAndSort(this.state.casesInfo, this.state.textFilter, this.state.filterDate, this.state.sort)}
             </tbody>
           </table>
         </div>
         <button onClick={this.visibleAddForm} className='btn'>Add</button>
         {this.state.visibleAdd ?
           <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error}/> : ''}
-        <Sort sortFunc={this.setSort}/>
+        <Sort arrows={this.state.sort} sortFunc={this.direction}/>
       </React.Fragment>
     )
   }

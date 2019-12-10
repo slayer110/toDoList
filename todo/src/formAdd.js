@@ -21,13 +21,12 @@ class Add extends Component {
   };
 
   render() {
-    let error;
     let that = this;
-    if (this.props.mistake) {
-      error = {backgroundColor: 'red'}
-    }
     if (this.state.textCase) {
-      error = {}
+      this.props.mistake.text = false;
+    }
+    if (this.state.startDate) {
+      this.props.mistake.date = false
     }
 
     function formatMonth() {
@@ -41,14 +40,13 @@ class Add extends Component {
     let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${formatMonth()}.${this.state.startDate.getFullYear()}` : '';
     return <form className='styleAdd' onSubmit={this.props.addCase.bind(null, this.state.textCase, formatDate)}>
       <h2>Add panel</h2>
-      <p><input className='inputsAdd' type='text' style={error}
+      <p><input className={this.props.mistake.text ? 'inputsAdd error' : 'inputsAdd'} type='text'
                 onChange={this.text}/></p>
-      <DatePicker className='inputsAdd' dateFormat="dd.MM.yyyy" selected={this.state.startDate}
+      <DatePicker className={this.props.mistake.date ? 'inputsAdd error' : 'inputsAdd'} dateFormat="dd.MM.yyyy"
+                  selected={this.state.startDate}
                   onChange={this.changeDate}/>
       <p><input type='submit' className='submitBtn' value='save'/></p>
     </form>
-
-
   }
 }
 

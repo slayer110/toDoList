@@ -42,6 +42,7 @@
     border-radius: 10px;
     text-align: center;
     margin-top: 20px;
+
 }
 
 .styleFilter {
@@ -54,7 +55,7 @@
     margin-top: 20px;
 }
 
-.styleSort a:last-child,.styleFilter a:last-child {
+.styleSort a:last-child, .styleFilter a:last-child {
     margin-left: 20px;
 }
 
@@ -68,6 +69,10 @@
     text-align: center;
     font-size: 20px;
     border-radius: 10px;
+}
+
+.error {
+    background-color: red;
 }
 
 .cases {
@@ -185,4 +190,28 @@ tr td:last-child {
     cursor: pointer;
     color: blue;
     font-weight: bold;
+}
+
+.byTask {
+    position: relative;
+    bottom: 41px;
+    left: 55px;
+}
+
+.byDate {
+    position: relative;
+    bottom: 80px;
+    left: 180px;
+}
+
+img {
+    cursor: pointer;
+    display: block;
+}
+
+.pDate {
+    position: absolute;
+    bottom: 76px;
+    left: 126px;
+    width: 51px;
 }
