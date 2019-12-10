@@ -35,29 +35,22 @@
 }
 
 .styleSort {
-    font-size: 15px;
-    position: absolute;
-    top: 62px;
-    left: 63%;
-    border-radius: 10px;
-    text-align: center;
-    margin-top: 20px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 20px;
+    left:20px;
 
 }
 
 .styleFilter {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     font-size: 15px;
     position: absolute;
-    top: 135px;
-    left: 63%;
-    border-radius: 10px;
     text-align: center;
-    margin-top: 20px;
+    top: 250px;
+    left: 151px;
 }
 
-.styleSort a:last-child, .styleFilter a:last-child {
-    margin-left: 20px;
-}
+
 
 .styleSort a {
     cursor: pointer;
@@ -174,14 +167,6 @@ tr td:last-child {
     cursor: pointer;
 }
 
-.sort {
-    position: absolute;
-    top: 14px;
-    left: 62%;
-    cursor: pointer;
-    color: blue;
-    font-weight: bold;
-}
 
 .filter {
     position: absolute;
@@ -194,24 +179,20 @@ tr td:last-child {
 
 .byTask {
     position: relative;
-    bottom: 41px;
-    left: 55px;
+    display: inline-block;
+    right: 80px;
+    top:50px;
 }
 
 .byDate {
     position: relative;
-    bottom: 80px;
-    left: 180px;
+    display: inline-block;
+    left: 50px;
+    top:50px;
+
 }
 
 img {
     cursor: pointer;
     display: block;
-}
-
-.pDate {
-    position: absolute;
-    bottom: 76px;
-    left: 126px;
-    width: 51px;
 }

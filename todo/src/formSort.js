@@ -9,7 +9,6 @@ class Sort extends Component {
 
   render() {
     return <div className='styleSort'>
-      <p className='pTask'>By task</p>
       <div className="byTask">
         <img
           src={this.props.arrows.direction === 'Up' && this.props.arrows.type === 'text' ? up_arrow_active : up_arrow}
@@ -19,7 +18,6 @@ class Sort extends Component {
           src={this.props.arrows.direction === 'Down' && this.props.arrows.type === 'text' ? down_arrow_active : down_arrow}
           onClick={this.props.sortFunc.bind(null, 'text', 'Down')}/>
       </div>
-      <p className='pDate'>By date</p>
       <div className='byDate'>
         <img
           src={this.props.arrows.direction === 'Up' && this.props.arrows.type === 'date' ? up_arrow_active : up_arrow}

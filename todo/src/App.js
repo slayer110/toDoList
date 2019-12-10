@@ -3,8 +3,7 @@ import './App.css';
 import Case from './Cases';
 import Add from './formAdd';
 import Sort from './formSort'
-import Filter from './formFilter'
-import {loadOptions} from "@babel/core";
+
 
 
 class App extends Component {
@@ -36,7 +35,7 @@ class App extends Component {
 
 
   changeDateForAdd = (date) => {
-    this.setState(function (state) {
+    this.setState(function () {
       return {
         startDate: date
       }
@@ -44,7 +43,7 @@ class App extends Component {
   };
 
   changeDateForFilter = (date) => {
-    this.setState(function (state) {
+    this.setState(function () {
       return {
         filterDate: date
       }
@@ -71,14 +70,17 @@ class App extends Component {
         date: date,
         id: unicId(this.state.casesInfo) + 1
       });
-      // this.setState(function (state) {
-      //   return {
-      //     filterDate: date
-      //   }
-      // });
-      this.setState({casesInfo: this.state.casesInfo, visibleAdd: false, error: false, textFilter: ''}, () => {
-        localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
-      })
+      this.setState(function (state) {
+          return {
+            casesInfo: state.casesInfo,
+            visibleAdd: false,
+            error: false,
+            textFilter: ''
+          }
+        }, () => {
+          localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
+        }
+      );
     } else {
       let errorType;
       if (!cases) {
@@ -90,12 +92,21 @@ class App extends Component {
       if (!date && !date) {
         errorType = {text: true, date: true};
       }
-      this.setState({error: errorType})
+      this.setState(function () {
+        return {
+          error: errorType
+        }
+      });
     }
   };
 
   filterText = (e) => {
-    this.setState({textFilter: e.target.value})
+    const {value} = e.target;
+    this.setState(function () {
+      return {
+        textFilter: value
+      }
+    });
   };
   checkCase = (index) => {
     let arr = this.state.casesInfo.map((elem) => {
@@ -180,10 +191,9 @@ class App extends Component {
     return (<React.Fragment>
         <div className='cases'>
           <h1>Cases</h1>
-          <p className='sort'>sort</p>
-          <p className='filter'>filter</p>
           <Filter filterText={this.filterText} changeDateFilter={this.changeDateForFilter}
                   text={this.state.textFilter}/>
+          <Sort arrows={this.state.sort} sortFunc={this.direction}/>
           <table>
             <thead>
             <tr>
@@ -200,7 +210,6 @@ class App extends Component {
         <button onClick={this.visibleAddForm} className='btn'>Add</button>
         {this.state.visibleAdd ?
           <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error}/> : ''}
-        <Sort arrows={this.state.sort} sortFunc={this.direction}/>
       </React.Fragment>
     )
   }

@@ -20,11 +20,12 @@ class Filter extends Component {
 
   render() {
     return <div className='styleFilter'>
+      <p style={{color: 'blue', fontSize: '20px'}}>filter</p>
       <a>By tasks</a>
-      <input type='text' value={this.props.text} onChange={this.props.filterText}/>
+      <p><input type='text' value={this.props.text} onChange={this.props.filterText}/></p>
       <a>By date</a>
-      <DatePicker dateFormat="dd.MM.yyyy" onChange={this.changeDate}
-                  selected={this.state.startDate}/>
+      <p><DatePicker dateFormat="dd.MM.yyyy" onChange={this.changeDate}
+                     selected={this.state.startDate}/></p>
     </div>
   }
 }
