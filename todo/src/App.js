@@ -7,8 +7,8 @@ import Filter from './formFilter'
 
 class App extends Component {
   constructor() {
-    let initialStateArray = JSON.parse(localStorage.getItem('sort')) || {type: '', direction: ''};
-    let initialStateSort = JSON.parse(localStorage.getItem('casesInfo')) || [
+    let initialStateSort = JSON.parse(localStorage.getItem('sort')) || {type: '', direction: ''};
+    let initialStateArray = JSON.parse(localStorage.getItem('casesInfo')) || [
       {text: 'Валера', done: false, date: '2.04.2019', id: 1},
       {text: 'Виктор', done: true, date: '5.04.2019', id: 2},
     ];
@@ -53,7 +53,6 @@ class App extends Component {
 
   addCase = (cases, date, e) => {
     e.preventDefault();
-
     function unicId(arr) {
       let max = 0;
       for (let i in arr) {
