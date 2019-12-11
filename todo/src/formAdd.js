@@ -14,19 +14,16 @@ class Add extends Component {
 
   changeDate = (date) => {
     this.props.changeDate(date);
-    this.setState(function () {
-      return {
+    this.setState({
         startDate: date
       }
-    });
+    );
   };
   text = (e) => {
-    let {value} = e.target;
-    this.setState(function () {
-      return {
-        textCase: value
+    this.setState({
+        textCase: e.target.value
       }
-    });
+    );
   };
 
   render() {

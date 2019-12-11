@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import './App.css';
-import Sort from "./formSort";
 
 class Filter extends Component {
   constructor() {
@@ -15,11 +14,10 @@ class Filter extends Component {
 
   changeDate = (date) => {
     this.props.changeDateFilter(date);
-    this.setState(function () {
-      return {
+    this.setState({
         startDate: date
       }
-    });
+    );
   };
 
   render() {
@@ -29,7 +27,7 @@ class Filter extends Component {
       <p><input type='text' value={this.props.text} onChange={this.props.filterText}/></p>
       <a>By date</a>
       <div><DatePicker dateFormat="dd.MM.yyyy" onChange={this.changeDate}
-                     selected={this.state.startDate}/></div>
+                       selected={this.state.startDate}/></div>
     </div>
   }
 }

@@ -36,23 +36,16 @@ class App extends Component {
 
 
   changeDateForAdd = (date) => {
-    this.setState(function () {
-      return {
-        startDate: date
-      }
-    });
+    this.setState({startDate: date})
   };
 
   changeDateForFilter = (date) => {
-    this.setState(function () {
-      return {
-        filterDate: date
-      }
-    });
+    this.setState({filterDate: date});
   };
 
   addCase = (cases, date, e) => {
     e.preventDefault();
+
     function unicId(arr) {
       let max = 0;
       for (let i in arr) {
@@ -92,20 +85,15 @@ class App extends Component {
       if (!date && !date) {
         errorType = {text: true, date: true};
       }
-      this.setState(function () {
-        return {
-          error: errorType
-        }
+      this.setState({
+        error: errorType
       });
     }
   };
 
   filterText = (e) => {
-    const {value} = e.target;
-    this.setState(function () {
-      return {
-        textFilter: value
-      }
+    this.setState({
+      textFilter: e.target.value
     });
   };
   checkCase = (index) => {
@@ -127,11 +115,10 @@ class App extends Component {
   };
 
   direction = (prop, direction) => {
-    this.setState(function () {
-      return {
+    this.setState({
         sort: {type: prop, direction: direction}
       }
-    });
+    );
   };
 
   sortABC(prop) {
