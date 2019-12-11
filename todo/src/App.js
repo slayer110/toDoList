@@ -27,7 +27,7 @@ class App extends Component {
   }
 
   visibleAddForm = () => {
-    this.setState(function (state) {
+    this.setState((state) => {
       return {
         visibleAdd: !state.visibleAdd
       }
@@ -63,7 +63,7 @@ class App extends Component {
         date: date,
         id: unicId(this.state.casesInfo) + 1
       });
-      this.setState(function (state) {
+      this.setState((state) => {
           return {
             casesInfo: state.casesInfo,
             visibleAdd: false,
@@ -103,7 +103,7 @@ class App extends Component {
       }
       return elem
     });
-    this.setState(function () {
+    this.setState(() => {
         return {
           casesInfo: arr
         }
