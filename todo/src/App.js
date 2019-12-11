@@ -57,15 +57,18 @@ class App extends Component {
     }
 
     if (cases && date) {
-      this.state.casesInfo.push({
+      let arr = [...this.state.casesInfo].map((elem) => {
+        return Object.assign({}, elem)
+      });
+      arr.push({
         text: cases,
         done: false,
         date: date,
         id: unicId(this.state.casesInfo) + 1
       });
-      this.setState((state) => {
+      this.setState(() => {
           return {
-            casesInfo: state.casesInfo,
+            casesInfo: arr,
             visibleAdd: false,
             error: false,
             textFilter: ''
@@ -97,7 +100,10 @@ class App extends Component {
     });
   };
   checkCase = (index) => {
-    let arr = this.state.casesInfo.map((elem) => {
+    let arr = [...this.state.casesInfo].map((elem) => {
+      return Object.assign({}, elem)
+    });
+    arr = arr.map((elem) => {
       if (elem.id === index) {
         return {...elem, done: !elem.done}
       }
@@ -148,7 +154,10 @@ class App extends Component {
   }
 
 
-  filterAndSort(arr, text, date, sort) {
+  filterAndSort(arrCase, text, date, sort) {
+    let arr = [...arrCase].map((elem) => {
+      return Object.assign({}, elem)
+    });
     let arrModified = arr;
 
     function formatMonth() {
@@ -174,11 +183,13 @@ class App extends Component {
     }
     if (sort.direction === 'Up') {
       arrModified.sort(this.sortABC(sort.type)).map((elem, index) =>
-        <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
+        <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
+              checkCase={this.checkCase}/>)
     }
     if (sort.direction === 'Down') {
       arrModified.sort(this.sortCBA(sort.type)).map((elem, index) =>
-        <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date} checkCase={this.checkCase}/>)
+        <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
+              checkCase={this.checkCase}/>)
     }
     localStorage.setItem('sort', JSON.stringify(this.state.sort));
     return arrModified.map((elem, index) =>
