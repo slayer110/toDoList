@@ -7,12 +7,14 @@ import Filter from './formFilter'
 
 class App extends Component {
   constructor() {
+    let initialStateArray = JSON.parse(localStorage.getItem('sort')) || {type: '', direction: ''};
+    let initialStateSort = JSON.parse(localStorage.getItem('casesInfo')) || [
+      {text: 'Валера', done: false, date: '2.04.2019', id: 1},
+      {text: 'Виктор', done: true, date: '5.04.2019', id: 2},
+    ];
     super();
     this.state = {
-      casesInfo: JSON.parse(localStorage.getItem('casesInfo')) || [
-        {text: 'Валера', done: false, date: '2.04.2019', id: 1},
-        {text: 'Виктор', done: true, date: '5.04.2019', id: 2},
-      ],
+      casesInfo: initialStateArray,
       startDate: '',
       filterDate: '',
       visibleAdd: false,
@@ -20,7 +22,7 @@ class App extends Component {
       visibleFilter: false,
       error: {text: false, date: false},
       textFilter: '',
-      sort:JSON.parse(localStorage.getItem('sort'))|| {type: '', direction: ''},
+      sort: initialStateSort,
     };
   }
 
@@ -162,6 +164,7 @@ class App extends Component {
 
   filterAndSort(arr, text, date, sort) {
     let arrModified = arr;
+
     function formatMonth() {
       if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
         return (date.getMonth() + 1)
