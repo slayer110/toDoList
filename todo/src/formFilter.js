@@ -28,8 +28,8 @@ class Filter extends Component {
       <a>By tasks</a>
       <p><input type='text' value={this.props.text} onChange={this.props.filterText}/></p>
       <a>By date</a>
-      <p><DatePicker dateFormat="dd.MM.yyyy" onChange={this.changeDate}
-                     selected={this.state.startDate}/></p>
+      <div><DatePicker dateFormat="dd.MM.yyyy" onChange={this.changeDate}
+                     selected={this.state.startDate}/></div>
     </div>
   }
 }

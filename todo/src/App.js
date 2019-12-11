@@ -5,7 +5,6 @@ import Add from './formAdd';
 import Sort from './formSort'
 import Filter from './formFilter'
 
-
 class App extends Component {
   constructor() {
     super();
