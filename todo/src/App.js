@@ -83,9 +83,9 @@ class App extends Component {
         errorType = {text: true, date: false};
       }
       if (!date) {
-        errorType = {text: true, date: false};
+        errorType = {text:false, date: true};
       }
-      if (!date && !date) {
+      if (!date && !cases) {
         errorType = {text: true, date: true};
       }
       this.setState({
