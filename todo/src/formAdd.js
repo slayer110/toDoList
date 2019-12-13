@@ -27,23 +27,13 @@ class Add extends Component {
   };
 
   render() {
-    let that = this;
     if (this.state.textCase) {
       this.props.mistake.text = false;
     }
     if (this.state.startDate) {
       this.props.mistake.date = false
     }
-
-    function formatMonth() {
-      if ((that.state.startDate.getMonth() + 1).toString().length === 2 && (that.state.startDate.getMonth() + 1).toString()[0] !== 1) {
-        return (that.state.startDate.getMonth() + 1)
-      } else {
-        return `0${that.state.startDate.getMonth() + 1}`
-      }
-    }
-
-    let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${formatMonth()}.${this.state.startDate.getFullYear()}` : '';
+    let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${this.props.formatMonth(this.state.startDate)}.${this.state.startDate.getFullYear()}` : '';
     return <form className='styleAdd' onSubmit={this.props.addCase.bind(null, this.state.textCase, formatDate)}>
       <h2>Add panel</h2>
       <p><input className={this.props.mistake.text ? 'inputsAdd error' : 'inputsAdd'} type='text'

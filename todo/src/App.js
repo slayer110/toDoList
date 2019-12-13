@@ -70,7 +70,7 @@ class App extends Component {
           return {
             casesInfo: arr,
             visibleAdd: false,
-            error: {date:false,text:false},
+            error: {date: false, text: false},
             textFilter: ''
           }
         }, () => {
@@ -99,6 +99,7 @@ class App extends Component {
       textFilter: e.target.value
     });
   };
+
   checkCase = (index) => {
     let arr = [...this.state.casesInfo].map((elem) => {
       return Object.assign({}, elem)
@@ -127,50 +128,47 @@ class App extends Component {
     );
   };
 
-  sortABC(prop) {
-    let formatFunc = (par) => par.split('.').reverse().join('.');
-    return (a, b) => {
-      if (prop === 'date') {
-        if (new Date(formatFunc(a[prop])) > new Date(formatFunc(b[prop]))) return 1;
-        if (new Date(formatFunc(a[prop])) < new Date(formatFunc(b[prop]))) return -1;
-      } else {
-        if (a[prop] > b[prop]) return 1;
-        if (a[prop] < b[prop]) return -1;
-      }
-    };
-  }
 
-  sortCBA(prop) {
-    let formatFunc = (par) => par.split('.').reverse().join('.');
-    return (a, b) => {
-      if (prop === 'date') {
-        if (new Date(formatFunc(a[prop])) > new Date(formatFunc(b[prop]))) return -1;
-        if (new Date(formatFunc(a[prop])) < new Date(formatFunc(b[prop]))) return 1;
-      } else {
+  sorting(prop, direction) {
+    if (direction === 'Down') {
+      return (a, b) => {
         if (a[prop] > b[prop]) return -1;
         if (a[prop] < b[prop]) return 1;
       }
-    };
+    } else {
+      return (a, b) => {
+        if (a[prop] > b[prop]) return 1;
+        if (a[prop] < b[prop]) return -1;
+      }
+    }
   }
 
+  formatMonth = (date) => {
+    if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
+      return (date.getMonth() + 1)
+    } else {
+      return `0${date.getMonth() + 1}`
+    }
+  };
+
+  formatDate = (date) => `${date.getDate()}.${this.formatMonth(date)}.${date.getFullYear()}`;
+
+  reverseDate = (par) => par.split('.').reverse().join('.');
 
   filterAndSort(arrCase, text, date, sort) {
     let arr = [...arrCase].map((elem) => {
       return Object.assign({}, elem)
     });
-    let arrModified = arr;
-    const elemCase = (elem, index) =>
-      <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elem.date}
-            checkCase={this.checkCase}/>;
-    const formatDate = (date) => `${date.getDate()}.${formatMonth()}.${date.getFullYear()}`;
 
-    function formatMonth() {
-      if ((date.getMonth() + 1).toString().length === 2 && (date.getMonth() + 1).toString()[0] !== 1) {
-        return (date.getMonth() + 1)
-      } else {
-        return `0${date.getMonth() + 1}`
+    let arrModified = arr;
+    const elemCase = (elem, index) => {
+      let elemDate = elem.date;
+      if (sort.direction) {
+        elemDate = this.formatDate(elem.date);
       }
-    }
+      return <Case key={index} id={elem.id} text={elem.text} done={elem.done} date={elemDate}
+                   checkCase={this.checkCase}/>
+    };
 
     if (text) {
       arrModified = arr.filter((elem) => {
@@ -181,14 +179,13 @@ class App extends Component {
     }
     if (date) {
       arrModified = arrModified.filter((elem) => {
-        return elem['date'] === formatDate(date)
+        return elem['date'] === this.formatDate(date)
       });
     }
-    if (sort.direction === 'Up') {
-      arrModified.sort(this.sortABC(sort.type)).map(elemCase)
-    }
-    if (sort.direction === 'Down') {
-      arrModified.sort(this.sortCBA(sort.type)).map(elemCase)
+    if (sort.direction) {
+      arrModified = arrModified.map((elem) => {
+        return {...elem, date: new Date(this.reverseDate(elem.date))}
+      }).sort(this.sorting(sort.type, sort.direction));
     }
     localStorage.setItem('sort', JSON.stringify(this.state.sort));
     return arrModified.map(elemCase)
@@ -216,7 +213,7 @@ class App extends Component {
         </div>
         <button onClick={this.visibleAddForm} className='btn'>Add</button>
         {this.state.visibleAdd ?
-          <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error}/> : ''}
+          <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error} formatMonth={this.formatMonth}/> : ''}
       </React.Fragment>
     )
   }
