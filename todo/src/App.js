@@ -197,12 +197,12 @@ class App extends Component {
           <h1>Cases</h1>
           <Filter filterText={this.filterText} changeDateFilter={this.changeDateForFilter}
                   text={this.state.textFilter}/>
-          <Sort arrows={this.state.sort} sortFunc={this.direction}/>
+
           <table>
             <thead>
             <tr>
-              <th>Task</th>
-              <th>Date</th>
+              <th>Task <Sort arrows={this.state.sort} sortFunc={this.direction} typeSort='text'/></th>
+              <th>Date <Sort arrows={this.state.sort} sortFunc={this.direction} typeSort='date'/></th>
               <th>Done</th>
             </tr>
             </thead>
@@ -213,7 +213,8 @@ class App extends Component {
         </div>
         <button onClick={this.visibleAddForm} className='btn'>Add</button>
         {this.state.visibleAdd ?
-          <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error} formatMonth={this.formatMonth}/> : ''}
+          <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error}
+               formatMonth={this.formatMonth}/> : ''}
       </React.Fragment>
     )
   }

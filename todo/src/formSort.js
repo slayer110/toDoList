@@ -6,25 +6,35 @@ import up_arrow_active from "./images/up_arrow_active.png";
 import down_arrow_active from "./images/down _arrow_active.png";
 
 class Sort extends Component {
+  visibleArrow = (direction) => {
+    if (this.props.typeSort === this.props.arrows.type && direction === this.props.arrows.direction) {
+      if (direction === 'Down') {
+        return down_arrow_active
+      }
+      if (direction === 'Up') {
+        return up_arrow_active
+      }
+    } else {
+      if (direction === 'Down') {
+        return down_arrow
+      }
+    }
+    if (direction === 'Up') {
+      return up_arrow
+    }
+  };
+
 
   render() {
     return <div className='styleSort'>
-      <div className="byTask">
+      <div>
         <img
-          src={this.props.arrows.direction === 'Up' && this.props.arrows.type === 'text' ? up_arrow_active : up_arrow}
-          onClick={this.props.sortFunc.bind(null, 'text', 'Up')}
+          src={this.visibleArrow('Up')}
+          onClick={this.props.sortFunc.bind(null, this.props.typeSort, 'Up')}
         />
         <img
-          src={this.props.arrows.direction === 'Down' && this.props.arrows.type === 'text' ? down_arrow_active : down_arrow}
-          onClick={this.props.sortFunc.bind(null, 'text', 'Down')}/>
-      </div>
-      <div className='byDate'>
-        <img
-          src={this.props.arrows.direction === 'Up' && this.props.arrows.type === 'date' ? up_arrow_active : up_arrow}
-          onClick={this.props.sortFunc.bind(null, 'date', 'Up')}/>
-        <img
-          src={this.props.arrows.direction === 'Down' && this.props.arrows.type === 'date' ? down_arrow_active : down_arrow}
-          onClick={this.props.sortFunc.bind(null, 'date', 'Down')}/>
+          src={this.visibleArrow('Down')}
+          onClick={this.props.sortFunc.bind(null, this.props.typeSort, 'Down')}/>
       </div>
     </div>
   }
