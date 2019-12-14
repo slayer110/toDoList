@@ -26,19 +26,27 @@ class Add extends Component {
     );
   };
 
-  render() {
+  checkErrorFunction = () => {
     if (this.state.textCase) {
       this.props.mistake.text = false;
     }
     if (this.state.startDate) {
       this.props.mistake.date = false
     }
+  };
+
+  errorClassFunction = (type) => {
+    return type ? 'inputsAdd error' : 'inputsAdd'
+  };
+
+  render() {
     let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${this.props.formatMonth(this.state.startDate)}.${this.state.startDate.getFullYear()}` : '';
+    this.checkErrorFunction();
     return <form className='styleAdd' onSubmit={this.props.addCase.bind(null, this.state.textCase, formatDate)}>
       <h2>Add panel</h2>
-      <p><input className={this.props.mistake.text ? 'inputsAdd error' : 'inputsAdd'} type='text'
+      <p><input className={this.errorClassFunction(this.props.mistake.text)} type='text'
                 onChange={this.text}/></p>
-      <DatePicker className={this.props.mistake.date ? 'inputsAdd error' : 'inputsAdd'} dateFormat="dd.MM.yyyy"
+      <DatePicker className={this.errorClassFunction(this.props.mistake.date)} dateFormat="dd.MM.yyyy"
                   selected={this.state.startDate}
                   onChange={this.changeDate}/>
       <p><input type='submit' className='submitBtn' value='save'/></p>
