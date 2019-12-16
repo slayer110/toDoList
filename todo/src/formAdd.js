@@ -16,22 +16,29 @@ class Add extends Component {
     this.props.changeDate(date);
     this.setState({
         startDate: date
+      }, () => {
+        this.checkErrorFunction()
       }
     );
   };
   text = (e) => {
-    this.setState({
-        textCase: e.target.value
+    let {value} = e.target;
+    this.setState((state) => {
+        return {
+          textCase: value
+        }
+      }, () => {
+        this.checkErrorFunction()
       }
     );
   };
 
   checkErrorFunction = () => {
     if (this.state.textCase) {
-      this.props.mistake.text = false;
+      this.props.mistakeFunction('text');
     }
     if (this.state.startDate) {
-      this.props.mistake.date = false
+      this.props.mistakeFunction('date');
     }
   };
 
@@ -41,7 +48,7 @@ class Add extends Component {
 
   render() {
     let formatDate = this.state.startDate ? `${this.state.startDate.getDate()}.${this.props.formatMonth(this.state.startDate)}.${this.state.startDate.getFullYear()}` : '';
-    this.checkErrorFunction();
+    // this.checkErrorFunction();
     return <form className='styleAdd' onSubmit={this.props.addCase.bind(null, this.state.textCase, formatDate)}>
       <h2>Add panel</h2>
       <p><input className={this.errorClassFunction(this.props.mistake.text)} type='text'

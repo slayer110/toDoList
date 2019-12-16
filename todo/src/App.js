@@ -153,6 +153,15 @@ class App extends Component {
 
   reverseDate = (par) => par.split('.').reverse().join('.');
 
+  errorFunction = (prop) => {
+    this.setState((state) => {
+      let obj = {...state.error};
+      obj[prop] = false;
+      return {error: obj}
+    });
+
+  };
+
   filterAndSort(arrCase, text, date, sort) {
     let arr = [...arrCase].map((elem) => {
       return Object.assign({}, elem)
@@ -212,6 +221,7 @@ class App extends Component {
         <button onClick={this.visibleAddForm} className='btn'>Add</button>
         {this.state.visibleAdd ?
           <Add changeDate={this.changeDateForAdd} addCase={this.addCase} mistake={this.state.error}
+               mistakeFunction={this.errorFunction}
                formatMonth={this.formatMonth}/> : ''}
       </React.Fragment>
     )
