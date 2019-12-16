@@ -172,7 +172,8 @@ class App extends Component {
       arrModified = arr.filter((elem) => {
         return elem['text'].toLowerCase().indexOf(this.state.textFilter.toLowerCase()) === 0
       });
-    } else {
+    }
+    if (!text) {
       arrModified = arr;
     }
     if (date) {
