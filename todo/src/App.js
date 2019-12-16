@@ -188,7 +188,6 @@ class App extends Component {
       }).sort(this.sorting(sort.type, sort.direction));
     }
     localStorage.setItem('sort', JSON.stringify(this.state.sort));
-    localStorage.clear();
     return arrModified.map(elemCase)
   }
 
