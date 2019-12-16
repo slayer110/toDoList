@@ -188,6 +188,7 @@ class App extends Component {
       }).sort(this.sorting(sort.type, sort.direction));
     }
     localStorage.setItem('sort', JSON.stringify(this.state.sort));
+    localStorage.clear();
     return arrModified.map(elemCase)
   }
 
@@ -197,7 +198,6 @@ class App extends Component {
           <h1>Cases</h1>
           <Filter filterText={this.filterText} changeDateFilter={this.changeDateForFilter}
                   text={this.state.textFilter}/>
-
           <table>
             <thead>
             <tr>

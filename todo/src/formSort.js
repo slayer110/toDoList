@@ -23,19 +23,15 @@ class Sort extends Component {
       return up_arrow
     }
   };
-
-
   render() {
     return <div className='styleSort'>
-      <div>
-        <img
-          src={this.visibleArrow('Up')}
-          onClick={this.props.sortFunc.bind(null, this.props.typeSort, 'Up')}
-        />
-        <img
-          src={this.visibleArrow('Down')}
-          onClick={this.props.sortFunc.bind(null, this.props.typeSort, 'Down')}/>
-      </div>
+      <img
+        src={this.visibleArrow('Up')}
+        onClick={this.props.sortFunc.bind(null, this.props.typeSort, 'Up')}
+      />
+      <img
+        src={this.visibleArrow('Down')}
+        onClick={this.props.sortFunc.bind(null, this.props.typeSort, 'Down')}/>
     </div>
   }
 }

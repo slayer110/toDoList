@@ -36,10 +36,12 @@
 
 .styleSort {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    font-size: 20px;
-    left:20px;
-
+    position: relative;
+    display: inline-block;
+    top:14px;
 }
+
+
 
 .styleFilter {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
@@ -175,21 +177,6 @@ tr td:last-child {
     cursor: pointer;
     color: blue;
     font-weight: bold;
-}
-
-.byTask {
-    position: relative;
-    display: inline-block;
-    right: 80px;
-    top:50px;
-}
-
-.byDate {
-    position: relative;
-    display: inline-block;
-    left: 50px;
-    top:50px;
-
 }
 
 img {
