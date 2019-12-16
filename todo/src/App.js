@@ -110,10 +110,8 @@ class App extends Component {
       }
       return elem
     });
-    this.setState(() => {
-        return {
-          casesInfo: arr
-        }
+    this.setState({
+        casesInfo: arr
       },
       () => {
         localStorage.setItem('casesInfo', JSON.stringify(this.state.casesInfo))
